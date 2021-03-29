@@ -6,9 +6,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class Holder(itemView: View, private val clickListener: OnClickListener): RecyclerView.ViewHolder(itemView) {
+class NumberHolder(itemView: View, private val clickListener: OnClickListener): RecyclerView.ViewHolder(itemView) {
     private val number: TextView = itemView.findViewById(R.id.number)
     private var numberValue: Int = 0
+
+    init {
+        number.setOnClickListener {
+            clickListener.onNumberClick(numberValue)
+        }
+    }
 
     fun bind(value: Int) {
         number.text = value.toString()
@@ -20,8 +26,5 @@ class Holder(itemView: View, private val clickListener: OnClickListener): Recycl
             Color.BLUE
 
         number.setTextColor(color)
-        number.setOnClickListener {
-            clickListener.onNumberClick(numberValue)
-        }
     }
 }

@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
 
         if (supportFragmentManager.findFragmentById(R.id.wrapper) == null) {
             val fm = supportFragmentManager.beginTransaction()
-            fm.add(R.id.wrapper, List())
+            fm.add(R.id.wrapper, ListFragment())
             fm.commit()
         }
     }

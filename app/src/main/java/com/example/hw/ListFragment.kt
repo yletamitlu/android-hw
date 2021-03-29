@@ -16,8 +16,8 @@ interface OnClickListener {
 }
 
 
-class List: Fragment(), OnClickListener {
-    var amount: Int = Consts.AMOUNT
+class ListFragment: Fragment(), OnClickListener {
+    private var amount: Int = Consts.AMOUNT
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,14 +36,18 @@ class List: Fragment(), OnClickListener {
 
         restoreState(savedInstanceState)
 
-        val data = DataSource(amount)
-        val adapter = Adapter(data, this)
+        val data: MutableList<Int> = mutableListOf()
+        for (i in 0..amount) {
+            data.add(i)
+        }
+        val adapter = NumberAdapter(data, this)
         recycler.adapter = adapter
 
         val btn = view.findViewById<Button>(R.id.button)
         btn.setOnClickListener {
-            adapter.notifyItemInserted(data.add())
-            amount = data.size() - 1
+            data.add(data.size)
+            adapter.notifyItemInserted(data.size - 1)
+            amount = data.size - 1
         }
 
         return view
@@ -64,7 +68,7 @@ class List: Fragment(), OnClickListener {
         val args = Bundle()
         args.putInt(Consts.LABEL_VALUE, number)
 
-        val singleNum = SingleNumber()
+        val singleNum = SingleNumberFragment()
         singleNum.arguments = args;
 
         val transaction = fragmentManager?.beginTransaction()

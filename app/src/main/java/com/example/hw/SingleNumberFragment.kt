@@ -9,12 +9,12 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 
 
-class SingleNumber: Fragment() {
+class SingleNumberFragment: Fragment() {
     private var value: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        value = arguments!!.getInt(Consts.LABEL_VALUE, 0)
+        value = arguments?.getInt(Consts.LABEL_VALUE, 0) ?: 0
     }
 
     override fun onCreateView (
