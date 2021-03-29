@@ -2,7 +2,6 @@ package com.example.hw
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class List: Fragment() {
+
+interface OnClickListener {
+    fun onNumberClick(number: Int)
+}
+
+
+class List: Fragment(), OnClickListener {
     var amount: Int = Consts.AMOUNT
 
     override fun onCreateView(
@@ -19,8 +24,6 @@ class List: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        Log.d("HOMEWORKLOG", "List: onCreateView")
         val columnCount: Int = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
             Consts.PORTRAIT_COLUMNS
         else
@@ -31,17 +34,14 @@ class List: Fragment() {
         recycler.setItemViewCacheSize(Consts.CACHE_SIZE)
         recycler.layoutManager = GridLayoutManager(this.context, columnCount)
 
-        if (savedInstanceState != null) {
-            amount = savedInstanceState.getInt(Consts.LABEL)
-        }
+        restoreState(savedInstanceState)
 
         val data = DataSource(amount)
-        val adapter = Adapter(data)
+        val adapter = Adapter(data, this)
         recycler.adapter = adapter
 
         val btn = view.findViewById<Button>(R.id.button)
         btn.setOnClickListener {
-            Log.d("HOMEWORKLOG", "btn: click")
             adapter.notifyItemInserted(data.add())
             amount = data.size() - 1
         }
@@ -49,8 +49,27 @@ class List: Fragment() {
         return view
     }
 
+    private fun restoreState(savedInstanceState: Bundle?) {
+        if (savedInstanceState != null) {
+            amount = savedInstanceState.getInt(Consts.LABEL_AMOUNT)
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(Consts.LABEL, amount)
+        outState.putInt(Consts.LABEL_AMOUNT, amount)
+    }
+
+    override fun onNumberClick(number: Int) {
+        val args = Bundle()
+        args.putInt(Consts.LABEL_VALUE, number)
+
+        val singleNum = SingleNumber()
+        singleNum.arguments = args;
+
+        val transaction = fragmentManager?.beginTransaction()
+        transaction?.replace(R.id.wrapper, singleNum)
+        transaction?.addToBackStack(null)
+        transaction?.commit()
     }
 }

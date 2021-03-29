@@ -5,5 +5,7 @@ object Consts {
     const val PORTRAIT_COLUMNS = 3
     const val LANDSCAPE_COLUMNS = 3
     const val CACHE_SIZE = 10
-    const val LABEL = "amount"
+    const val LABEL_AMOUNT = "amount"
+    const val LABEL_VALUE = "value"
+    const val LABEL_NUMBER = "amount"
 }
